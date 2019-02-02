@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,6 +40,10 @@ public class CatDataServiceImpl implements CatDataService {
 		}
 
 		return catDao.findAll()
-				.switchIfEmpty(catDao.saveAll(Flux.fromStream(catConnector.getCatsFromURI(uri))));
+				.switchIfEmpty(catDao.saveAll(Flux.fromStream(catConnector.getCatsFromURI(uri))))
+				.onErrorResume(e -> {
+					log.error("Error while retrieving cats.", e);
+					return Mono.error(e);
+				});
 	}
 }

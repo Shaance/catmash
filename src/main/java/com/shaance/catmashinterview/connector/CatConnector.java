@@ -10,7 +10,7 @@ public interface CatConnector {
 
 	/**
 	 * @param uri place where we can retrieve cat
-	 * @return flux of cats from the URI
+	 * @return Stream of cats from the URI
 	 */
 	Stream<Cat> getCatsFromURI(URI uri);
 
