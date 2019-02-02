@@ -39,8 +39,6 @@ public class CatDataServiceImpl implements CatDataService {
 		}
 
 		return catDao.findAll()
-				.switchIfEmpty(catConnector.getCatsFromURI(uri))
-				.doOnNext(cat -> catDao.save(cat));
-
+				.switchIfEmpty(catDao.saveAll(Flux.fromStream(catConnector.getCatsFromURI(uri))));
 	}
 }

@@ -8,18 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import reactor.core.publisher.Flux;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
 public class CatConnectorImpl implements CatConnector {
 
 	@Override
-	public Flux<Cat> getCatsFromURI(@NonNull URI uri) {
+	public Stream<Cat> getCatsFromURI(@NonNull URI uri) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<CatDataDto> response;
 		try{
@@ -30,12 +30,12 @@ public class CatConnectorImpl implements CatConnector {
 		} catch (IllegalArgumentException e){
 			log.error("Error while transforming catDto to cat entity.", e);
 		}
-		return Flux.empty();
+		return Stream.empty();
 	}
 
 
-	private Flux<Cat> catDataDtoToCatEntity(@NonNull CatDataDto catDataDto){
-		return Flux.fromStream(catDataDto.getImages()
+	private Stream<Cat> catDataDtoToCatEntity(@NonNull CatDataDto catDataDto){
+		return catDataDto.getImages()
 				.stream()
 				.map(item -> {
 					try {
@@ -43,6 +43,6 @@ public class CatConnectorImpl implements CatConnector {
 					} catch (URISyntaxException e) {
 						throw new IllegalArgumentException("URI is badly formed.", e);
 					}
-				}));
+				});
 	}
 }

@@ -1,17 +1,17 @@
 package com.shaance.catmashinterview.connector;
 
 import com.shaance.catmashinterview.entity.Cat;
-import reactor.core.publisher.Flux;
 
 import java.net.URI;
+import java.util.stream.Stream;
 
 public interface CatConnector {
 
 
 	/**
 	 * @param uri place where we can retrieve cat
-	 * @return flux of cats from the URI or null when an error occurred
+	 * @return flux of cats from the URI
 	 */
-	Flux<Cat> getCatsFromURI(URI uri);
+	Stream<Cat> getCatsFromURI(URI uri);
 
 }
