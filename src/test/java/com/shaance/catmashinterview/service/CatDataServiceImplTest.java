@@ -64,7 +64,7 @@ public class CatDataServiceImplTest {
 						new Cat("id1", new URI("uri1")),
 						new Cat("id2", new URI("uri2"))
 				));
-		Mockito.when(catDao.saveAll(any(Flux.class))).thenReturn(Flux.just(new Cat(null, null)));
+		Mockito.when(catDao.saveAll(any(Flux.class))).thenReturn(Flux.just(new Cat("", new URI(""))));
 		Flux<Cat> cats = catDataService.getCats();
 		Assert.assertTrue(cats.hasElements().block());
 		Mockito.verify(catConnector, Mockito.times(1)).getCatsFromURI(any(URI.class));

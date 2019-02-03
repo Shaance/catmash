@@ -1,4 +1,4 @@
-# catmash-interview
+# catmash
 
 Description
 -----------

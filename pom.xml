@@ -5,15 +5,15 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.2.RELEASE</version>
+		<version>2.0.0.RELEASE</version>
 		<relativePath/>
 	</parent>
 
 	<groupId>com.shaance</groupId>
-	<artifactId>catmash-interview</artifactId>
+	<artifactId>catmash</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>catmash-interview</name>
-	<description>Demo project l'Atelier's interview</description>
+	<name>catmash</name>
+	<description>Demo project for l'Atelier's interview</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>2.24.0</version>
+			<version>2.23.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -57,7 +57,7 @@ public class CatRandomMashingServiceImplTest {
 		catRandomMashingService.saveCatMashRecord(new CatMashRecordDto(null, null)).block();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveCatMashRecordWhenWinnerCatIdNull() throws URISyntaxException {
 		catRandomMashingService.saveCatMashRecord(
 				new CatMashRecordDto(new Cat(null, new URI("uri1")), null))
@@ -71,7 +71,7 @@ public class CatRandomMashingServiceImplTest {
 				.block();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveCatMashRecordWhenLooserCatIdNull() throws URISyntaxException {
 		catRandomMashingService.saveCatMashRecord(
 				new CatMashRecordDto(

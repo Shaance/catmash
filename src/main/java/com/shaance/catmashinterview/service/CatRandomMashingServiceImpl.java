@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -48,8 +47,7 @@ public class CatRandomMashingServiceImpl implements CatMashingService {
 
 	@Override
 	public Mono<CatMashRecordDto> saveCatMashRecord(@NonNull CatMashRecordDto catMashRecordDto) {
-		if (catMashRecordDto.getWinnerCat() == null || StringUtils.isEmpty(catMashRecordDto.getWinnerCat().getId()) ||
-				catMashRecordDto.getLooserCat() == null || StringUtils.isEmpty(catMashRecordDto.getLooserCat().getId())){
+		if (catMashRecordDto.getWinnerCat() == null  || catMashRecordDto.getLooserCat() == null){
 			return Mono.error(new IllegalArgumentException("catMashRecordDto has null or empty field(s)."));
 		}
 		ModelMapper modelMapper = new ModelMapper();

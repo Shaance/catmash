@@ -1,27 +1,18 @@
 package com.shaance.catmashinterview.service;
 
 import com.shaance.catmashinterview.entity.Cat;
-import reactor.core.publisher.Mono;
+import org.springframework.data.util.Pair;
 
 public interface CatMashStatisticService {
 
 	/**
-	 * @return
+	 * @return the all time most voted Cat with its associated number of votes
 	 */
-	Mono<Cat> getAllTimeMostVoted();
+	Pair<Cat, Long> getAllTimeMostVoted();
 
 	/**
-	 * @return
+	 * @return today's most voted cat with its associated number of votes
 	 */
-	Mono<Cat> getTodayMostVoted();
+	Pair<Cat, Long> getTodayMostVoted();
 
-	/**
-	 * @return
-	 */
-	Mono<Cat> getThisWeekMostVoted();
-
-	/**
-	 * @return
-	 */
-	Mono<Cat> getNumberOfVotesByCat();
 }
