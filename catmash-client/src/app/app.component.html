@@ -1,0 +1,17 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+
+  <div *ngIf="pairOfCats">
+    <a (click)="saveMashRecord(pairOfCats[0], pairOfCats[1])">
+      <img [src]="pairOfCats[0].url"/>
+    </a>
+    <a (click)="saveMashRecord(pairOfCats[1], pairOfCats[0])">
+        <img [src]="pairOfCats[1].url"/>
+    </a>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
