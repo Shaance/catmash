@@ -1,9 +1,6 @@
 package com.shaance.catmashinterview.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.NonNull;
@@ -14,6 +11,7 @@ import java.net.URI;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 @Document
 public class Cat {
 

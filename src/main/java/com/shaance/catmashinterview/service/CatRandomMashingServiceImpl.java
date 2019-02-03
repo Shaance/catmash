@@ -47,7 +47,7 @@ public class CatRandomMashingServiceImpl implements CatMashingService {
 
 	@Override
 	public Mono<CatMashRecordDto> saveCatMashRecord(@NonNull CatMashRecordDto catMashRecordDto) {
-		if (catMashRecordDto.getWinnerCat() == null  || catMashRecordDto.getLooserCat() == null){
+		if (catMashRecordDto.getWinnerCat() == null  || catMashRecordDto.getLoserCat() == null){
 			return Mono.error(new IllegalArgumentException("catMashRecordDto has null or empty field(s)."));
 		}
 		ModelMapper modelMapper = new ModelMapper();
