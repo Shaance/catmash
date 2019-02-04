@@ -1,5 +1,6 @@
 package com.shaance.catmashinterview.service;
 
+import com.shaance.catmashinterview.dao.CatDao;
 import com.shaance.catmashinterview.dao.CatMashRecordDao;
 import com.shaance.catmashinterview.dto.CatMashRecordDto;
 import com.shaance.catmashinterview.entity.Cat;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -30,11 +32,13 @@ public class CatRandomMashingServiceImpl implements CatMashingService {
 
 	private CatDataService catDataService;
 	private CatMashRecordDao catMashRecordDao;
+	private CatDao catDao;
 
 	@Autowired
-	public CatRandomMashingServiceImpl(CatDataService catDataService, CatMashRecordDao catMashRecordDao) {
+	public CatRandomMashingServiceImpl(CatDataService catDataService, CatMashRecordDao catMashRecordDao, CatDao catDao) {
 		this.catDataService = catDataService;
 		this.catMashRecordDao = catMashRecordDao;
+		this.catDao = catDao;
 	}
 
 	@Override
@@ -47,9 +51,19 @@ public class CatRandomMashingServiceImpl implements CatMashingService {
 
 	@Override
 	public Mono<CatMashRecordDto> saveCatMashRecord(@NonNull CatMashRecordDto catMashRecordDto) {
-		if (catMashRecordDto.getWinnerCat() == null  || catMashRecordDto.getLoserCat() == null){
+		if (StringUtils.isEmpty(catMashRecordDto.getWinnerCatId())  || StringUtils.isEmpty(catMashRecordDto.getLoserCatId())){
 			return Mono.error(new IllegalArgumentException("catMashRecordDto has null or empty field(s)."));
 		}
+
+		Long numberOfCatsInDB = catDao.findById(catMashRecordDto.getWinnerCatId())
+				.concatWith(catDao.findById(catMashRecordDto.getLoserCatId()))
+				.count()
+				.block();
+
+		if(2L != numberOfCatsInDB){
+			return Mono.error(new IllegalArgumentException("One or more catId does not exist in database."));
+		}
+
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		CatMashRecord catMashRecord = modelMapper.map(catMashRecordDto, CatMashRecord.class);

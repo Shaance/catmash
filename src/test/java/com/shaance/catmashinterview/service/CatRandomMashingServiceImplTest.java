@@ -1,9 +1,7 @@
 package com.shaance.catmashinterview.service;
 
-import com.shaance.catmashinterview.dao.CatMashRecordDao;
 import com.shaance.catmashinterview.dto.CatMashRecordDto;
 import com.shaance.catmashinterview.entity.Cat;
-import com.shaance.catmashinterview.entity.CatMashRecord;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,9 +18,6 @@ public class CatRandomMashingServiceImplTest {
 
 	@Mock
 	private CatDataService catDataService;
-
-	@Mock
-	private CatMashRecordDao catMashRecordDao;
 
 	@InjectMocks
 	private CatRandomMashingServiceImpl catRandomMashingService;
@@ -57,43 +51,18 @@ public class CatRandomMashingServiceImplTest {
 		catRandomMashingService.saveCatMashRecord(new CatMashRecordDto(null, null)).block();
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void saveCatMashRecordWhenWinnerCatIdNull() throws URISyntaxException {
+	@Test(expected = IllegalArgumentException.class)
+	public void saveCatMashRecordWhenWinnerCatIdNull() {
 		catRandomMashingService.saveCatMashRecord(
-				new CatMashRecordDto(new Cat(null, new URI("uri1")), null))
+				new CatMashRecordDto(null, ""))
 				.block();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void saveCatMashRecordWhenLooserCatIsNull() throws URISyntaxException {
+	public void saveCatMashRecordWhenLooserCatIsNull() {
 		catRandomMashingService.saveCatMashRecord(
-				new CatMashRecordDto(new Cat("", new URI("uri1")), null))
+				new CatMashRecordDto("", null))
 				.block();
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void saveCatMashRecordWhenLooserCatIdNull() throws URISyntaxException {
-		catRandomMashingService.saveCatMashRecord(
-				new CatMashRecordDto(
-						new Cat("", new URI("uri1")),
-						new Cat(null, new URI("uri1")))
-				)
-				.block();
-	}
-
-	@Test
-	public void saveCatMashRecord() throws URISyntaxException {
-		Mockito.when(catMashRecordDao.save(Mockito.any(CatMashRecord.class)))
-				.thenReturn(Mono.just(new CatMashRecord()));
-
-		Assert.assertNotNull(
-				catRandomMashingService.saveCatMashRecord(
-					new CatMashRecordDto(
-							new Cat("1", new URI("uri1")),
-							new Cat("2", new URI("uri2"))
-					)
-				).block()
-		);
 	}
 
 

@@ -38,23 +38,23 @@ public class CatMashStatisticServiceImplTest {
 	@Test
 	public void getAllTimeMostVoted() throws URISyntaxException {
 
-		Cat allTimeMostVotedCat = new Cat("id2", new URI("uri1"));
+		String allTimeMostVotedCat = "id2";
 
 		Flux<CatMashRecord> mockFlux =
 				Flux.just(
-						new CatMashRecord("", new Cat("id1", new URI("uri1")), new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", new Cat("id1", new URI("uri1")), new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", new Cat("id3", new URI("uri1")), new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now())
+						new CatMashRecord("","id1", "id3", LocalDateTime.now()),
+						new CatMashRecord("", "id1", "id3", LocalDateTime.now()),
+						new CatMashRecord("", allTimeMostVotedCat, "id3", LocalDateTime.now()),
+						new CatMashRecord("", allTimeMostVotedCat, "id3", LocalDateTime.now()),
+						new CatMashRecord("", "id3", "id4", LocalDateTime.now()),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now()),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now())
 				);
 
 		Mockito.when(catMashRecordDao.findAll()).thenReturn(mockFlux);
 
 		//it should use "id2" to find the cat, if not it will produce NPE
-		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(allTimeMostVotedCat));
+		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(new Cat(allTimeMostVotedCat, new URI(""))));
 
 		Pair<Cat, Long> result = catMashStatisticService.getAllTimeMostVoted();
 		Assert.assertEquals(4, result.getSecond(), 0);
@@ -64,27 +64,27 @@ public class CatMashStatisticServiceImplTest {
 
 	@Test
 	public void getTodayMostVoted() throws URISyntaxException {
-		Cat todayMostVotedCat = new Cat("id2", new URI("uri1"));
-		Cat allTimeMostVotedCat = new Cat("id1", new URI("uri1"));
+		String todayMostVotedCat = "id2";
+		String allTimeMostVotedCat = "id1";
 
 		Flux<CatMashRecord> mockFlux =
 				Flux.just(
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now().minusDays(1)),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now().minusDays(1)),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now().minusDays(1)),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now().minusDays(1)),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now().minusDays(1)),
-						new CatMashRecord("", allTimeMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now().minusDays(1)),
-						new CatMashRecord("", todayMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", todayMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", new Cat("id3", new URI("uri1")), new Cat("id2", new URI("uri2")), LocalDateTime.now()),
-						new CatMashRecord("", todayMostVotedCat, new Cat("id2", new URI("uri2")), LocalDateTime.now())
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now().minusDays(1)),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now().minusDays(1)),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now().minusDays(1)),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now().minusDays(1)),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now().minusDays(1)),
+						new CatMashRecord("", allTimeMostVotedCat, "id5", LocalDateTime.now().minusDays(1)),
+						new CatMashRecord("", todayMostVotedCat, "id5", LocalDateTime.now()),
+						new CatMashRecord("", todayMostVotedCat, "id5", LocalDateTime.now()),
+						new CatMashRecord("", "id3", "id5", LocalDateTime.now()),
+						new CatMashRecord("", todayMostVotedCat, "id5", LocalDateTime.now())
 				);
 
 		Mockito.when(catMashRecordDao.findAll()).thenReturn(mockFlux);
 
 		//it should use "id2" to find the cat, if not it will produce NPE
-		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(todayMostVotedCat));
+		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(new Cat(todayMostVotedCat, new URI(""))));
 
 		Pair<Cat, Long> result = catMashStatisticService.getTodayMostVoted();
 		Assert.assertEquals(3, result.getSecond(), 0);

@@ -67,7 +67,7 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 		catMashRecordFlux
 				.toStream()
 				.filter(filterCondition)
-				.map(catMashRecord -> catMashRecord.getWinnerCat().getId())
+				.map(CatMashRecord::getWinnerCatId)
 				.collect(Collectors.groupingBy(String::valueOf, Collectors.counting()))
 				.entrySet()
 				.stream()

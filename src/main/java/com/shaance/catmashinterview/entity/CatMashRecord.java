@@ -22,10 +22,10 @@ public class CatMashRecord {
 	private String id;
 
 	@NonNull
-	private Cat winnerCat;
+	private String winnerCatId;
 
 	@NonNull
-	private Cat looserCat;
+	private String looserCatId;
 
 	@NonNull
 	private LocalDateTime localDateTime;

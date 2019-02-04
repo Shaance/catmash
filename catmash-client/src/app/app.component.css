@@ -1,15 +1,15 @@
 h1 { 
     color: #111; 
     font-family: 'Helvetica Neue', sans-serif; 
-    font-size: 35px; 
+    font-size: 45px; 
     font-weight: bold; 
     letter-spacing: -1px; 
-    line-height: 7; 
+    line-height: 6; 
     text-align: center; 
 }
 
 img {
     max-width:450px;
     max-height:450px;
-    margin: 15px;
+    margin: 20px;
 }

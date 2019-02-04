@@ -10,4 +10,4 @@ Java 8, Spring Boot 2, MongoDB
 
 FrontEnd
 --------
-Angular 6
+Angular 7
