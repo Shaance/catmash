@@ -1,7 +1,6 @@
 import { PairOfCats } from './pair-of-cats';
 import { Component, OnInit } from '@angular/core';
 import { RestService } from './rest.service';
-import { Cat } from './cat';
 
 @Component({
   selector: 'app-root',

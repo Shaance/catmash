@@ -4,7 +4,7 @@
     {{ title }}
   </h1>
 
-  <div *ngIf="pairOfCats">
+  <div *ngIf="pairOfCats; else loading">
     <a (click)="saveMashRecord(pairOfCats[0].id, pairOfCats[1].id)">
       <img [src]="pairOfCats[0].url"/>
     </a>
@@ -12,6 +12,7 @@
         <img [src]="pairOfCats[1].url"/>
     </a>
   </div>
+  <ng-template #loading>Loading Cat Data...</ng-template>
 </div>
 
 <router-outlet></router-outlet>
