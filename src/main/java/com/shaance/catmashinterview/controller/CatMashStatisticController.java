@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/api/v1/cat/stats")
@@ -19,13 +20,13 @@ public class CatMashStatisticController {
 	}
 
 	@GetMapping("all")
-	public CatWithNumberOfVotesDto getAllTimeMostVoted(){
-		return catMashStatisticService.getAllTimeMostVoted();
+	public Flux<CatWithNumberOfVotesDto> getAllTimeMostVoted(){
+		return catMashStatisticService.getAllTimeCatsWithVotes();
 	}
 
 	@GetMapping("today")
-	public CatWithNumberOfVotesDto getTodayMostVoted(){
-		return catMashStatisticService.getTodayMostVoted();
+	public Flux<CatWithNumberOfVotesDto> getTodayMostVoted(){
+		return catMashStatisticService.getTodayCatsWithVotes();
 	}
 
 }

@@ -31,8 +31,7 @@ export class AppComponent implements OnInit {
   getAllTimeMostVotedCat() {
     this.restService.getAllTimeMostVotedCat().subscribe(
       c => {
-        console.log(c.cat.url);
-        console.log(c.votes);
+        console.log(c);
       });
   }
 }

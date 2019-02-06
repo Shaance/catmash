@@ -1,17 +1,18 @@
 package com.shaance.catmashinterview.service;
 
 import com.shaance.catmashinterview.dto.CatWithNumberOfVotesDto;
+import reactor.core.publisher.Flux;
 
 public interface CatMashStatisticService {
 
 	/**
-	 * @return the all time most voted Cat with its associated number of votes
+	 * @return a flux of all time most voted Cats with their associated number of votes
 	 */
-	CatWithNumberOfVotesDto getAllTimeMostVoted();
+	Flux<CatWithNumberOfVotesDto> getAllTimeCatsWithVotes();
 
 	/**
-	 * @return today's most voted cat with its associated number of votes
+	 * @return a flux of today's most voted cats with their associated number of votes
 	 */
-	CatWithNumberOfVotesDto getTodayMostVoted();
+	Flux<CatWithNumberOfVotesDto> getTodayCatsWithVotes();
 
 }

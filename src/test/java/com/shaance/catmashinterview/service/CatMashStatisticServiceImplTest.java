@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,6 +39,13 @@ public class CatMashStatisticServiceImplTest {
 
 		String allTimeMostVotedCat = "id2";
 
+		Flux<Cat> catFlux = Flux.just(
+				new Cat("id1", new URI("uri1")),
+				new Cat("id2", new URI("uri2")),
+				new Cat("id3", new URI("uri2")),
+				new Cat("id4", new URI("uri2"))
+		);
+
 		Flux<CatMashRecord> mockFlux =
 				Flux.just(
 						new CatMashRecord("","id1", "id3", LocalDateTime.now()),
@@ -52,13 +58,14 @@ public class CatMashStatisticServiceImplTest {
 				);
 
 		Mockito.when(catMashRecordDao.findAll()).thenReturn(mockFlux);
+		Mockito.when(catDao.findAll()).thenReturn(catFlux);
 
-		//it should use "id2" to find the cat, if not it will produce NPE
-		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(new Cat(allTimeMostVotedCat, new URI(""))));
-
-		CatWithNumberOfVotesDto result = catMashStatisticService.getAllTimeMostVoted();
-		Assert.assertEquals(4, result.getVotes(), 0);
-		Assert.assertEquals("id2", result.getCat().getId());
+		Flux<CatWithNumberOfVotesDto> result = catMashStatisticService.getAllTimeCatsWithVotes();
+		CatWithNumberOfVotesDto mostVotedCat = result.blockFirst();
+		Long numberOfElements = result.count().block();
+		Assert.assertEquals(4, numberOfElements, 0);
+		Assert.assertEquals("id2", mostVotedCat.getCat().getId());
+		Assert.assertEquals(4, mostVotedCat.getVotes(), 0);
 
 	}
 
@@ -66,6 +73,13 @@ public class CatMashStatisticServiceImplTest {
 	public void getTodayMostVoted() throws URISyntaxException {
 		String todayMostVotedCat = "id2";
 		String allTimeMostVotedCat = "id1";
+
+		Flux<Cat> catFlux = Flux.just(
+				new Cat("id1", new URI("uri1")),
+				new Cat("id2", new URI("uri2")),
+				new Cat("id3", new URI("uri2")),
+				new Cat("id4", new URI("uri2"))
+		);
 
 		Flux<CatMashRecord> mockFlux =
 				Flux.just(
@@ -82,13 +96,16 @@ public class CatMashStatisticServiceImplTest {
 				);
 
 		Mockito.when(catMashRecordDao.findAll()).thenReturn(mockFlux);
+		Mockito.when(catDao.findAll()).thenReturn(catFlux);
 
-		//it should use "id2" to find the cat, if not it will produce NPE
-		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(new Cat(todayMostVotedCat, new URI(""))));
+		Flux<CatWithNumberOfVotesDto> result = catMashStatisticService.getTodayCatsWithVotes();
 
-		CatWithNumberOfVotesDto result = catMashStatisticService.getTodayMostVoted();
-		Assert.assertEquals(3, result.getVotes(), 0);
-		Assert.assertEquals("id2", result.getCat().getId());
+		CatWithNumberOfVotesDto mostVotedCat = result.blockFirst();
+		Long numberOfElements = result.count().block();
+		Assert.assertEquals(4, numberOfElements, 0);
+		Assert.assertEquals("id2", mostVotedCat.getCat().getId());
+		Assert.assertEquals(3, mostVotedCat.getVotes(), 0);
+
 
 	}
 
