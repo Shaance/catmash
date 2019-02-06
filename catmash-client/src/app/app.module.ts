@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { StatsComponent } from './stats/stats.component';
 import { RestService } from './rest.service';
+import { CatsComponent } from './cats/cats.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    StatsComponent
+    StatsComponent,
+    CatsComponent
   ],
   imports: [
     BrowserModule,

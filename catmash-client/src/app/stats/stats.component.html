@@ -1,3 +1,15 @@
-<p>
-  To be implemented!
-</p>
+<div style="text-align:center">
+  <div class="card-group">
+      <li *ngFor="let cat of catsWithVotes;" style="list-style: none;">
+          <div class="card">
+              <img class="card-img-top" src='{{cat.cat.url}}' alt="Cat image">
+              <div class="card-body">
+                <h5 class="card-title">Number of votes: {{cat.votes}}</h5>
+              </div>
+          </div>
+      </li>
+  </div>
+  <footer>
+    <button routerLink="/mash" type="button" class="btn btn-secondary" (click)="getAllTimeMostVotedCat()">Go back Mashing</button>
+  </footer>
+</div>
