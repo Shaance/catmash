@@ -2,6 +2,7 @@ package com.shaance.catmashinterview.service;
 
 import com.shaance.catmashinterview.dao.CatDao;
 import com.shaance.catmashinterview.dao.CatMashRecordDao;
+import com.shaance.catmashinterview.dto.CatWithNumberOfVotesDto;
 import com.shaance.catmashinterview.entity.Cat;
 import com.shaance.catmashinterview.entity.CatMashRecord;
 import org.junit.Assert;
@@ -11,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.util.Pair;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -56,9 +56,9 @@ public class CatMashStatisticServiceImplTest {
 		//it should use "id2" to find the cat, if not it will produce NPE
 		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(new Cat(allTimeMostVotedCat, new URI(""))));
 
-		Pair<Cat, Long> result = catMashStatisticService.getAllTimeMostVoted();
-		Assert.assertEquals(4, result.getSecond(), 0);
-		Assert.assertEquals("id2", result.getFirst().getId());
+		CatWithNumberOfVotesDto result = catMashStatisticService.getAllTimeMostVoted();
+		Assert.assertEquals(4, result.getVotes(), 0);
+		Assert.assertEquals("id2", result.getCat().getId());
 
 	}
 
@@ -86,9 +86,9 @@ public class CatMashStatisticServiceImplTest {
 		//it should use "id2" to find the cat, if not it will produce NPE
 		Mockito.when(catDao.findById("id2")).thenReturn(Mono.just(new Cat(todayMostVotedCat, new URI(""))));
 
-		Pair<Cat, Long> result = catMashStatisticService.getTodayMostVoted();
-		Assert.assertEquals(3, result.getSecond(), 0);
-		Assert.assertEquals("id2", result.getFirst().getId());
+		CatWithNumberOfVotesDto result = catMashStatisticService.getTodayMostVoted();
+		Assert.assertEquals(3, result.getVotes(), 0);
+		Assert.assertEquals("id2", result.getCat().getId());
 
 	}
 

@@ -2,6 +2,7 @@ package com.shaance.catmashinterview.service;
 
 import com.shaance.catmashinterview.dao.CatDao;
 import com.shaance.catmashinterview.dao.CatMashRecordDao;
+import com.shaance.catmashinterview.dto.CatWithNumberOfVotesDto;
 import com.shaance.catmashinterview.entity.Cat;
 import com.shaance.catmashinterview.entity.CatMashRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +33,13 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 	}
 
 	@Override
-	public Pair<Cat, Long>  getAllTimeMostVoted() {
+	public CatWithNumberOfVotesDto getAllTimeMostVoted() {
 
 		return getMostVotedCatWithPredicate(catMashRecord -> true);
 	}
 
 	@Override
-	public Pair<Cat, Long> getTodayMostVoted() {
+	public CatWithNumberOfVotesDto getTodayMostVoted() {
 
 		return getMostVotedCatWithPredicate(catMashRecord ->
 				catMashRecord.getLocalDateTime().toLocalDate().toEpochDay() == LocalDate.now().toEpochDay());
@@ -46,7 +47,7 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 	}
 
 
-	private Pair<Cat, Long> getMostVotedCatWithPredicate(Predicate<CatMashRecord> filterCondition){
+	private CatWithNumberOfVotesDto getMostVotedCatWithPredicate(Predicate<CatMashRecord> filterCondition){
 		AtomicReference<Pair<String, Long>> catIdVotesPair = getCatIdVotesPair(catMashRecordDao.findAll(), filterCondition);
 		String catId = catIdVotesPair.get().getFirst();
 		if(StringUtils.isEmpty(catId)){
@@ -58,7 +59,7 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 				log.error("Could not find cat.");
 				return null;
 			}
-			return Pair.of(cat, catIdVotesPair.get().getSecond());
+			return new CatWithNumberOfVotesDto(cat, catIdVotesPair.get().getSecond());
 		}
 	}
 

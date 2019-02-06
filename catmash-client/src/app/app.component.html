@@ -1,5 +1,4 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<div style="text-align:center" [style.backgroung]="'url(./assets/cat_wallpaper.jpg)'">
   <h1>
     {{ title }}
   </h1>
@@ -13,6 +12,9 @@
     </a>
   </div>
   <ng-template #loading>Loading Cat Data...</ng-template>
+  <footer>
+    <button (click)="getAllTimeMostVotedCat()">View hottest cat!</button>
+  </footer>
 </div>
 
 <router-outlet></router-outlet>

@@ -1,4 +1,4 @@
-import { PairOfCats } from './pair-of-cats';
+import { PairOfCats } from './api/pair-of-cats';
 import { Component, OnInit } from '@angular/core';
 import { RestService } from './rest.service';
 
@@ -26,5 +26,13 @@ export class AppComponent implements OnInit {
   getPair() {
     this.restService.getPairOfCats()
     .subscribe(pair => this.pairOfCats = pair);
+  }
+
+  getAllTimeMostVotedCat() {
+    this.restService.getAllTimeMostVotedCat().subscribe(
+      c => {
+        console.log(c.cat.url);
+        console.log(c.votes);
+      });
   }
 }

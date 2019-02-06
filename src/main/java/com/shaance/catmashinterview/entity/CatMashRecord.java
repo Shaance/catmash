@@ -25,7 +25,7 @@ public class CatMashRecord {
 	private String winnerCatId;
 
 	@NonNull
-	private String looserCatId;
+	private String loserCatId;
 
 	@NonNull
 	private LocalDateTime localDateTime;
