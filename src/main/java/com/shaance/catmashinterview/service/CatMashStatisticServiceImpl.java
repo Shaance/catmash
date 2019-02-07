@@ -6,7 +6,7 @@ import com.shaance.catmashinterview.dto.CatWithNumberOfVotesDto;
 import com.shaance.catmashinterview.entity.CatMashRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Component
+@Service
 public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 
 	private CatMashRecordDao catMashRecordDao;

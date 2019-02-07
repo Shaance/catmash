@@ -6,7 +6,7 @@ import com.shaance.catmashinterview.entity.Cat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,7 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Slf4j
-@Component
+@Service
 public class CatDataServiceImpl implements CatDataService {
 
 	@Value("${atelier.cats.uri}")

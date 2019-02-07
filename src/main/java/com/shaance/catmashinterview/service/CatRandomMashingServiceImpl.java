@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -27,7 +27,7 @@ import java.util.UUID;
  */
 
 @Slf4j
-@Component
+@Service
 public class CatRandomMashingServiceImpl implements CatMashingService {
 
 	private CatDataService catDataService;
