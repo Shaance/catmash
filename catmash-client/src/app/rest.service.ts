@@ -5,8 +5,9 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { PairOfCats } from './api/pair-of-cats';
+import { environment } from 'src/environments/environment';
 
-const endpoint = 'http://localhost:8080/api/v1/cat';
+const endpoint = environment.host + ':8080/api/v1/cat';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
