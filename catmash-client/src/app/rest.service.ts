@@ -38,6 +38,13 @@ export class RestService {
       );
   }
 
+  getTodayTimeMostVotedCat(): Observable<CatWithVotes> {
+    return this.http.get(endpoint + '/stats/today').pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>('getTodayTimeMostVotedCat'))
+      );
+  }
+
   private extractData(res: Response) {
     const body = res;
     return body || { };
