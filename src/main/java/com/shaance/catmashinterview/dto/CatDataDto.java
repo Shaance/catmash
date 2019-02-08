@@ -11,5 +11,5 @@ import java.util.List;
 public class CatDataDto implements Serializable {
 
 	private static final long serialVersionUID = -5176689324929894392L;
-	private List<ImageDto> images;
+	private List<CatDto> images;
 }

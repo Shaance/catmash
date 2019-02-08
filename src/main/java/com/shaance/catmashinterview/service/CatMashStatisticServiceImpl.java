@@ -2,6 +2,7 @@ package com.shaance.catmashinterview.service;
 
 import com.shaance.catmashinterview.dao.CatDao;
 import com.shaance.catmashinterview.dao.CatMashRecordDao;
+import com.shaance.catmashinterview.dto.CatDto;
 import com.shaance.catmashinterview.dto.CatWithNumberOfVotesDto;
 import com.shaance.catmashinterview.entity.CatMashRecord;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 		Map<String, Long> catIdVotesMap = getCatIdVotesMap(catMashRecordDao.findAll(), filterCondition);
 
 		return catDao.findAll()
-				.map(cat -> new CatWithNumberOfVotesDto(cat, catIdVotesMap.getOrDefault(cat.getId(), 0L)))
+				.map(cat -> new CatWithNumberOfVotesDto(new CatDto(cat.getId(), cat.getUrl().toString()), catIdVotesMap.getOrDefault(cat.getId(), 0L)))
 				.sort(Comparator.comparing(CatWithNumberOfVotesDto::getVotes).reversed());
 	}
 
