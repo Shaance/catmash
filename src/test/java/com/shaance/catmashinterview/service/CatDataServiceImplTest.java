@@ -37,20 +37,13 @@ public class CatDataServiceImplTest {
 	}
 
 	@Test
-	public void getCatsBadURI() {
-		setUriField("11http:/s./s");
-		Flux<Cat> cats = catDataService.getCats();
-		Assert.assertEquals(Flux.empty(), cats);
-	}
-
-	@Test
 	public void getCatsWhenCatDaoFindNothingConnectorIsCalledButIsEmpty() {
 		Mockito.when(catDao.findAll()).thenReturn(Flux.empty());
 		setUriField("http://bla.com");
-		Mockito.when(catConnector.getCatsFromURI(any(URI.class))).thenReturn(Stream.empty());
+		Mockito.when(catConnector.getCatsFromStringURI(any(String.class))).thenReturn(Stream.empty());
 		Mockito.when(catDao.saveAll(any(Flux.class))).thenReturn(Flux.empty());
 		Flux<Cat> cats = catDataService.getCats();
-		Mockito.verify(catConnector, Mockito.times(1)).getCatsFromURI(any(URI.class));
+		Mockito.verify(catConnector, Mockito.times(1)).getCatsFromStringURI(any(String.class));
 		Mockito.verify(catDao, Mockito.never()).save(any(Cat.class));
 		Assert.assertFalse(cats.hasElements().block());
 	}
@@ -59,7 +52,7 @@ public class CatDataServiceImplTest {
 	public void getCatsWhenCatDaoFindNothingConnectorIsCalled() throws URISyntaxException {
 		Mockito.when(catDao.findAll()).thenReturn(Flux.empty());
 		setUriField("http://bla.com");
-		Mockito.when(catConnector.getCatsFromURI(any(URI.class)))
+		Mockito.when(catConnector.getCatsFromStringURI(any(String.class)))
 				.thenReturn(Stream.of(
 						new Cat("id1", new URI("uri1")),
 						new Cat("id2", new URI("uri2"))
@@ -67,7 +60,7 @@ public class CatDataServiceImplTest {
 		Mockito.when(catDao.saveAll(any(Flux.class))).thenReturn(Flux.just(new Cat("", new URI(""))));
 		Flux<Cat> cats = catDataService.getCats();
 		Assert.assertTrue(cats.hasElements().block());
-		Mockito.verify(catConnector, Mockito.times(1)).getCatsFromURI(any(URI.class));
+		Mockito.verify(catConnector, Mockito.times(1)).getCatsFromStringURI(any(String.class));
 		Mockito.verify(catDao, Mockito.times(1)).saveAll(any(Flux.class));
 	}
 
@@ -79,7 +72,7 @@ public class CatDataServiceImplTest {
 				new Cat("id2", new URI("uri2"))
 		));
 		setUriField("http://bla.com");
-		Mockito.when(catConnector.getCatsFromURI(any(URI.class))).thenReturn(Stream.empty());
+		Mockito.when(catConnector.getCatsFromStringURI(any(String.class))).thenReturn(Stream.empty());
 		Mockito.when(catDao.saveAll(any(Flux.class))).thenReturn(Flux.empty());
 		Flux<Cat> cats = catDataService.getCats();
 		Assert.assertTrue(cats.hasElements().block());

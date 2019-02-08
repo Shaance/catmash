@@ -36,8 +36,8 @@ public class CatConnectorImplTest {
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void getCatsFromNullURI() throws URISyntaxException {
-		catConnector.getCatsFromURI(new URI(null));
+	public void getCatsFromNullURI() {
+		catConnector.getCatsFromStringURI(null);
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class CatConnectorImplTest {
 		);
 		Mockito.when(restTemplate.getForEntity(validUri, CatDataDto.class))
 				.thenReturn(ResponseEntity.ok(catDataDto));
-		Stream<Cat> result = catConnector.getCatsFromURI(validUri);
+		Stream<Cat> result = catConnector.getCatsFromStringURI(validUri.toString());
 		assertTrue(result.count() > 0);
 	}
 
@@ -59,7 +59,7 @@ public class CatConnectorImplTest {
 		URI invalidUri = new URI("http://latelier.co/data/cats.json");
 		Mockito.when(restTemplate.getForEntity(invalidUri, CatDataDto.class))
 				.thenThrow(HttpClientErrorException.class);
-		Stream<Cat> result = catConnector.getCatsFromURI(invalidUri);
+		Stream<Cat> result = catConnector.getCatsFromStringURI(invalidUri.toString());
 		assertEquals(0, result.count());
 	}
 

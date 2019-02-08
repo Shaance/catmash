@@ -27,15 +27,17 @@ public class CatConnectorImpl implements CatConnector {
 	}
 
 	@Override
-	public Stream<Cat> getCatsFromURI(@NonNull URI uri) {
+	public Stream<Cat> getCatsFromStringURI(@NonNull String uri) {
 		ResponseEntity<CatDataDto> response;
 		try{
-			response = restTemplate.getForEntity(uri, CatDataDto.class);
+			response = restTemplate.getForEntity(new URI(uri), CatDataDto.class);
 			return catDataDtoToCatEntity(Objects.requireNonNull(response.getBody()));
 		} catch (HttpClientErrorException e){
 			log.error("Error while retrieving cat data.", e);
 		} catch (IllegalArgumentException e){
 			log.error("Error while transforming catDto to cat entity.", e);
+		} catch (URISyntaxException e) {
+			log.error("Bad URI syntax.", e);
 		}
 		return Stream.empty();
 	}
