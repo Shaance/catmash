@@ -1,6 +1,7 @@
 package com.shaance.catmashinterview.controller;
 
 import com.shaance.catmashinterview.dto.CatWithNumberOfVotesDto;
+import com.shaance.catmashinterview.dto.CatWithWinningRatioDto;
 import com.shaance.catmashinterview.service.CatMashStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +20,24 @@ public class CatMashStatisticController {
 		this.catMashStatisticService = catMashStatisticService;
 	}
 
-	@GetMapping("all")
-	public Flux<CatWithNumberOfVotesDto> getAllTimeMostVoted(){
-		return catMashStatisticService.getAllTimeCatsWithVotes();
+	@GetMapping("votes/all")
+	public Flux<CatWithNumberOfVotesDto> getCatsWithAllTimeVotesInDescOrder(){
+		return catMashStatisticService.getCatsWithAllTimeVotesInDescOrder();
 	}
 
-	@GetMapping("today")
-	public Flux<CatWithNumberOfVotesDto> getTodayMostVoted(){
-		return catMashStatisticService.getTodayCatsWithVotes();
+	@GetMapping("votes/today")
+	public Flux<CatWithNumberOfVotesDto> getCatsWithTodayVotesInDescOrder(){
+		return catMashStatisticService.getCatsWithTodayVotesInDescOrder();
+	}
+
+	@GetMapping("ratio/all")
+	public Flux<CatWithWinningRatioDto> getCatsWithAllTimeWinningRatioInDescOrder(){
+		return catMashStatisticService.getCatsWithAllTimeWinningRatioInDescOrder();
+	}
+
+	@GetMapping("ratio/today")
+	public Flux<CatWithWinningRatioDto> getCatsWithTodayWinningRatioInDescOrder(){
+		return catMashStatisticService.getCatsWithTodayWinningRatioInDescOrder();
 	}
 
 }

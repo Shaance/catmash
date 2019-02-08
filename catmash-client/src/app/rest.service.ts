@@ -32,14 +32,14 @@ export class RestService {
   }
 
   getAllTimeMostVotedCat(): Observable<CatWithVotes> {
-    return this.http.get(endpoint + '/stats/all').pipe(
+    return this.http.get(endpoint + '/stats/votes/all').pipe(
         map(this.extractData),
         catchError(this.handleError<any>('getAllTimeMostVotedCat'))
       );
   }
 
   getTodayMostVotedCat(): Observable<CatWithVotes> {
-    return this.http.get(endpoint + '/stats/today').pipe(
+    return this.http.get(endpoint + '/stats/votes/today').pipe(
         map(this.extractData),
         catchError(this.handleError<any>('getTodayMostVotedCat'))
       );
