@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 @Slf4j
 @Service
 public class CatDataServiceImpl implements CatDataService {
@@ -31,16 +28,8 @@ public class CatDataServiceImpl implements CatDataService {
 
 	@Override
 	public Flux<Cat> getCats() {
-		URI uri;
-		try {
-			uri = new URI(this.stringUrl);
-		} catch (URISyntaxException e) {
-			log.error("Bad URI syntax.", e);
-			return Flux.empty();
-		}
-
 		return catDao.findAll()
-				.switchIfEmpty(catDao.saveAll(Flux.fromStream(catConnector.getCatsFromURI(uri))))
+				.switchIfEmpty(catDao.saveAll(Flux.fromStream(catConnector.getCatsFromStringURI(stringUrl))))
 				.onErrorResume(e -> {
 					log.error("Error while retrieving cats.", e);
 					return Mono.error(e);
