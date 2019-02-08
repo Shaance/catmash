@@ -78,10 +78,9 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 		//catId, numberOfWins, numberOfLoses
 		Map<String, Pair<Float, Float>> catStatsMap = new HashMap<>();
 
-		catMashRecordDao.findAll()
-				.toStream()
+		return catMashRecordDao.findAll()
 				.filter(filterCondition)
-				.forEach(catMashRecord -> {
+				.doOnNext(catMashRecord -> {
 					String winnerCatId = catMashRecord.getWinnerCatId();
 					String loserCatId = catMashRecord.getLoserCatId();
 
@@ -103,18 +102,17 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 						catStatsMap.put(loserCatId, Pair.of(0f, 1f));
 					}
 
-				});
+				}).thenMany(catDao.findAll()
+						.map(cat -> {
+							if (catStatsMap.containsKey(cat.getId())) {
+								Pair<Float, Float> floatPair = catStatsMap.get(cat.getId());
+								float winningRatio = floatPair.getFirst() / (floatPair.getFirst() + floatPair.getSecond());
+								return new CatWithWinningRatioDto(cat.getId(), cat.getUrl().toString(), winningRatio);
+							} else {
+								return new CatWithWinningRatioDto(cat.getId(), cat.getUrl().toString(), -1f);
+							}
+						}));
 
-		return catDao.findAll()
-				.map(cat -> {
-					if (catStatsMap.containsKey(cat.getId())) {
-						Pair<Float, Float> floatPair = catStatsMap.get(cat.getId());
-						float winningRatio = floatPair.getFirst() / (floatPair.getFirst() + floatPair.getSecond());
-						return new CatWithWinningRatioDto(cat.getId(), cat.getUrl().toString(), winningRatio);
-					} else {
-						return new CatWithWinningRatioDto(cat.getId(), cat.getUrl().toString(), -1f);
-					}
-				});
 
 	}
 }
