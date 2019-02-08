@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 public class CatDataServiceImpl implements CatDataService {
 
 	@Value("${atelier.cats.uri}")
-	private String uri;
+	private String stringUrl;
 
 	private CatConnector catConnector;
 	private CatDao catDao;
@@ -33,7 +33,7 @@ public class CatDataServiceImpl implements CatDataService {
 	public Flux<Cat> getCats() {
 		URI uri;
 		try {
-			uri = new URI(this.uri);
+			uri = new URI(this.stringUrl);
 		} catch (URISyntaxException e) {
 			log.error("Bad URI syntax.", e);
 			return Flux.empty();

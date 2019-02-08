@@ -86,7 +86,7 @@ public class CatDataServiceImplTest {
 	}
 
 	private void setUriField(String s) {
-		Field field = ReflectionUtils.findField(CatDataServiceImpl.class, "uri");
+		Field field = ReflectionUtils.findField(CatDataServiceImpl.class, "stringUrl");
 		ReflectionUtils.makeAccessible(field);
 		ReflectionUtils.setField(field, catDataService, s);
 	}
