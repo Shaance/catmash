@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { PairOfCats } from '../api/pair-of-cats';
 import { RestService } from '../rest.service';
+import { Cat } from '../api/cat';
 
 @Component({
   templateUrl: './cats.component.html'
 })
 export class CatsComponent implements OnInit {
 
-  pairOfCats: PairOfCats;
+  pairOfCats: Cat;
 
   constructor(private restService: RestService) {}
 

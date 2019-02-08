@@ -3,9 +3,9 @@ import { CatMashRecord } from './api/cat-mash-record';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
-import { PairOfCats } from './api/pair-of-cats';
+import { map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Cat } from './api/cat';
 
 const endpoint = environment.host + ':8080/api/v1/cat';
 const httpOptions = {
@@ -20,7 +20,7 @@ export class RestService {
 
   constructor(private http: HttpClient) { }
 
-  getPairOfCats(): Observable<PairOfCats> {
+  getPairOfCats(): Observable<Cat> {
     return this.http.get(endpoint + '/pair')
     .pipe(catchError(this.handleError<any>('getPairOfCats')));
   }
@@ -38,10 +38,10 @@ export class RestService {
       );
   }
 
-  getTodayTimeMostVotedCat(): Observable<CatWithVotes> {
+  getTodayMostVotedCat(): Observable<CatWithVotes> {
     return this.http.get(endpoint + '/stats/today').pipe(
         map(this.extractData),
-        catchError(this.handleError<any>('getTodayTimeMostVotedCat'))
+        catchError(this.handleError<any>('getTodayMostVotedCat'))
       );
   }
 

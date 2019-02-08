@@ -29,7 +29,7 @@ export class StatsComponent implements OnInit {
 
   getTodaysMostVotedCat() {
     this.nextPeriodicity = allTime + votes;
-    this.restService.getTodayTimeMostVotedCat()
+    this.restService.getTodayMostVotedCat()
     .subscribe(cats => this.catsWithVotes = cats);
   }
 
