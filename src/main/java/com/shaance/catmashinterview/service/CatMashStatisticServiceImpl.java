@@ -107,11 +107,13 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 							if (catStatsMap.containsKey(cat.getId())) {
 								Pair<Float, Float> floatPair = catStatsMap.get(cat.getId());
 								float winningRatio = floatPair.getFirst() / (floatPair.getFirst() + floatPair.getSecond());
-								return new CatWithWinningRatioDto(cat.getId(), cat.getUrl().toString(), winningRatio);
+								return new CatWithWinningRatioDto(new CatDto(cat.getId(), cat.getUrl().toString()), winningRatio);
 							} else {
-								return new CatWithWinningRatioDto(cat.getId(), cat.getUrl().toString(), -1f);
+								return new CatWithWinningRatioDto(new CatDto(cat.getId(), cat.getUrl().toString()), -1f);
 							}
-						}));
+						})
+						.sort(Comparator.comparing(CatWithWinningRatioDto::getWinningRatio).reversed())
+				);
 
 
 	}

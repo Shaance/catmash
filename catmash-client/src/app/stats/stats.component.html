@@ -1,15 +1,16 @@
 <div style="text-align:center">
   <div class="card-group">
-      <li *ngFor="let cat of catsWithVotes;" style="list-style: none;">
+      <li *ngFor="let cat of catsWithString;" style="list-style: none;">
           <div class="card">
               <img class="card-img-top" src='{{cat.cat.url}}' alt="Cat image">
               <div class="card-body">
-                <h5 class="card-title">Number of votes: {{cat.votes}}</h5>
+                <h5 class="card-title">{{mode}}: {{cat.value}}</h5>
               </div>
           </div>
       </li>
   </div>
   <footer>
+    <button type="button" class="btn btn-secondary" (click)="switchMode()">Switch mode</button>
     <button type="button" class="btn btn-secondary" (click)="switchPeriodicity()">{{nextPeriodicity}}</button>
     <button routerLink="/mash" type="button" class="btn btn-secondary">Go back Mashing</button>
   </footer>

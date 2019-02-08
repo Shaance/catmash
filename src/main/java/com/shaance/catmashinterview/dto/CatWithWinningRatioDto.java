@@ -15,12 +15,7 @@ public class CatWithWinningRatioDto implements Serializable {
 
 	private static final long serialVersionUID = -2473254295687680256L;
 
-	private String catId;
-
-	/**
-	 * Url of the cat's image
-	 */
-	private String url;
+	private CatDto cat;
 
 	/**
 	 * Winning ratio of the Cat, equals -1f when N/A (is not present in CatMashRecord)

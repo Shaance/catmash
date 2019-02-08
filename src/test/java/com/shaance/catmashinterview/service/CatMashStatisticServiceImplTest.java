@@ -151,7 +151,7 @@ public class CatMashStatisticServiceImplTest {
 
 		result.toStream()
 				.forEach(catWithWinningRatioDto ->
-						Assert.assertEquals(assertMap.get(catWithWinningRatioDto.getCatId()), catWithWinningRatioDto.getWinningRatio()));
+						Assert.assertEquals(assertMap.get(catWithWinningRatioDto.getCat().getId()), catWithWinningRatioDto.getWinningRatio()));
 
 
 	}
@@ -194,7 +194,7 @@ public class CatMashStatisticServiceImplTest {
 
 		result.toStream()
 				.forEach(catWithWinningRatioDto ->
-						Assert.assertEquals(assertMap.get(catWithWinningRatioDto.getCatId()), catWithWinningRatioDto.getWinningRatio()));
+						Assert.assertEquals(assertMap.get(catWithWinningRatioDto.getCat().getId()), catWithWinningRatioDto.getWinningRatio()));
 	}
 
 

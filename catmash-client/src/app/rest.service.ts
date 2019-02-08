@@ -1,3 +1,5 @@
+import { CatWithString } from './api/cat-with-string';
+import { CatWithRatio } from './api/cat-with-ratio';
 import { CatWithVotes } from './api/cat-with-votes';
 import { CatMashRecord } from './api/cat-mash-record';
 import { Injectable } from '@angular/core';
@@ -31,24 +33,66 @@ export class RestService {
     );
   }
 
-  getAllTimeMostVotedCat(): Observable<CatWithVotes> {
-    return this.http.get(endpoint + '/stats/votes/all').pipe(
-        map(this.extractData),
-        catchError(this.handleError<any>('getAllTimeMostVotedCat'))
+  getCatsWithAllTimeVotesInDescOrder(): Observable<CatWithString[]> {
+    return this.http.get<CatWithVotes[]>(endpoint + '/stats/votes/all').pipe(
+      map(catArray => {
+        const catWithStringArray: CatWithString[] = [];
+          catArray.forEach(cat => {
+            catWithStringArray.push(new CatWithString(cat.cat, String(cat.votes)));
+          });
+          return catWithStringArray;
+        }),
+        catchError(this.handleError<any>('getCatsWithAllTimeVotesInDescOrder'))
       );
   }
 
-  getTodayMostVotedCat(): Observable<CatWithVotes> {
-    return this.http.get(endpoint + '/stats/votes/today').pipe(
-        map(this.extractData),
-        catchError(this.handleError<any>('getTodayMostVotedCat'))
+  getCatsWithTodayVotesInDescOrder(): Observable<CatWithString[]> {
+    return this.http.get<CatWithVotes[]>(endpoint + '/stats/votes/today').pipe(
+        map(catArray => {
+          const catWithStringArray: CatWithString[] = [];
+          catArray.forEach(cat => {
+            catWithStringArray.push(new CatWithString(cat.cat, String(cat.votes)));
+          });
+          return catWithStringArray;
+        }),
+        catchError(this.handleError<any>('getCatsWithTodayVotesInDescOrder'))
       );
   }
 
-  private extractData(res: Response) {
-    const body = res;
-    return body || { };
+  getCatsWithAllTimeWinningRatioInDescOrder(): Observable<CatWithString[]> {
+    return this.http.get<CatWithRatio[]>(endpoint + '/stats/ratio/all')
+    .pipe(
+      map(catArray => {
+        const catWithStringArray: CatWithString[] = [];
+        catArray.forEach(cat => {
+          if (cat.winningRatio === -1) {
+            catWithStringArray.push(new CatWithString(cat.cat, 'N/A'));
+          } else {
+            catWithStringArray.push(new CatWithString(cat.cat, String(cat.winningRatio)));
+          }
+        });
+        return catWithStringArray;
+        }), catchError(this.handleError<any>('getCatsWithAllTimeWinningRatioInDescOrder'))
+      );
   }
+
+  getCatsWithTodayWinningRatioInDescOrder(): Observable<CatWithString[]> {
+    return this.http.get<CatWithRatio[]>(endpoint + '/stats/ratio/today')
+    .pipe(
+      map(catArray => {
+        const catWithStringArray: CatWithString[] = [];
+        catArray.forEach(cat => {
+          if (cat.winningRatio === -1) {
+            catWithStringArray.push(new CatWithString(cat.cat, 'N/A'));
+          } else {
+            catWithStringArray.push(new CatWithString(cat.cat, String(cat.winningRatio)));
+          }
+        });
+        return catWithStringArray;
+      }), catchError(this.handleError<any>('getCatsWithTodayWinningRatioInDescOrder'))
+    );
+  }
+
 
   private handleError<T> (operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
