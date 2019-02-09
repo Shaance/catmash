@@ -7,7 +7,8 @@ const today = 'Today\'s ';
 const votes = 'votes';
 const ratio = 'ratio';
 @Component({
-  templateUrl: './stats.component.html'
+  templateUrl: './stats.component.html',
+  styles: ['.btn { margin: 5px; }']
 })
 export class StatsComponent implements OnInit {
 
