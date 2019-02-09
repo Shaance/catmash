@@ -56,20 +56,15 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 	}
 
 	private Flux<CatWithNumberOfVotesDto> getMostVotedCatsWithPredicate(Predicate<CatMashRecord> filterCondition) {
-		Map<String, Long> catIdVotesMap = getCatIdVotesMap(filterCondition);
 
-		return catDao.findAll()
-				.map(cat -> new CatWithNumberOfVotesDto(new CatDto(cat.getId(), cat.getUrl().toString()), catIdVotesMap.getOrDefault(cat.getId(), 0L)))
-				.sort(Comparator.comparing(CatWithNumberOfVotesDto::getVotes).reversed());
-	}
-
-
-	private Map<String, Long> getCatIdVotesMap(Predicate<CatMashRecord> filterCondition) {
 		return catMashRecordDao.findAll()
-				.toStream()
 				.filter(filterCondition)
 				.map(CatMashRecord::getWinnerCatId)
-				.collect(Collectors.groupingBy(String::valueOf, Collectors.counting()));
+				.collect(Collectors.groupingBy(String::valueOf, Collectors.counting()))
+				.flatMapMany(stringLongMap -> catDao.findAll()
+								.map(cat -> new CatWithNumberOfVotesDto(new CatDto(cat.getId(), cat.getUrl().toString()),
+										stringLongMap.getOrDefault(cat.getId(), 0L)))
+								.sort(Comparator.comparing(CatWithNumberOfVotesDto::getVotes).reversed()));
 
 	}
 
