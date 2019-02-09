@@ -87,20 +87,17 @@ public class CatMashStatisticServiceImpl implements CatMashStatisticService {
 					if (catStatsMap.containsKey(winnerCatId)) {
 						Pair<Float, Float> pair = catStatsMap.get(winnerCatId);
 						catStatsMap.put(winnerCatId, Pair.of(pair.getFirst() + 1f, pair.getSecond()));
+					} else {
+						catStatsMap.put(winnerCatId, Pair.of(1f, 0f));
 					}
 
 					if (catStatsMap.containsKey(loserCatId)) {
 						Pair<Float, Float> pair = catStatsMap.get(loserCatId);
 						catStatsMap.put(loserCatId, Pair.of(pair.getFirst(), pair.getSecond() + 1f));
-					}
-
-					if (!catStatsMap.containsKey(winnerCatId)) {
-						catStatsMap.put(winnerCatId, Pair.of(1f, 0f));
-					}
-
-					if (!catStatsMap.containsKey(loserCatId)) {
+					} else {
 						catStatsMap.put(loserCatId, Pair.of(0f, 1f));
 					}
+
 
 				}).thenMany(catDao.findAll()
 						.map(cat -> {
