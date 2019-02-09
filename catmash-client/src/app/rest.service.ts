@@ -35,61 +35,33 @@ export class RestService {
 
   getCatsWithAllTimeVotesInDescOrder(): Observable<CatWithString[]> {
     return this.http.get<CatWithVotes[]>(endpoint + '/stats/votes/all').pipe(
-      map(catArray => {
-        const catWithStringArray: CatWithString[] = [];
-          catArray.forEach(cat => {
-            catWithStringArray.push(new CatWithString(cat.cat, String(cat.votes)));
-          });
-          return catWithStringArray;
-        }),
-        catchError(this.handleError<any>('getCatsWithAllTimeVotesInDescOrder'))
+        map(catArray => catArray.map(cat => new CatWithString(cat.cat, String(cat.votes)))
+        ),  catchError(this.handleError<any>('getCatsWithAllTimeVotesInDescOrder'))
       );
   }
 
   getCatsWithTodayVotesInDescOrder(): Observable<CatWithString[]> {
     return this.http.get<CatWithVotes[]>(endpoint + '/stats/votes/today').pipe(
-        map(catArray => {
-          const catWithStringArray: CatWithString[] = [];
-          catArray.forEach(cat => {
-            catWithStringArray.push(new CatWithString(cat.cat, String(cat.votes)));
-          });
-          return catWithStringArray;
-        }),
-        catchError(this.handleError<any>('getCatsWithTodayVotesInDescOrder'))
+        map(catArray => catArray.map(cat => new CatWithString(cat.cat, String(cat.votes)))
+        ), catchError(this.handleError<any>('getCatsWithTodayVotesInDescOrder'))
       );
   }
 
   getCatsWithAllTimeWinningRatioInDescOrder(): Observable<CatWithString[]> {
     return this.http.get<CatWithRatio[]>(endpoint + '/stats/ratio/all')
     .pipe(
-      map(catArray => {
-        const catWithStringArray: CatWithString[] = [];
-        catArray.forEach(cat => {
-          if (cat.winningRatio === -1) {
-            catWithStringArray.push(new CatWithString(cat.cat, 'N/A'));
-          } else {
-            catWithStringArray.push(new CatWithString(cat.cat, String(cat.winningRatio)));
-          }
-        });
-        return catWithStringArray;
-        }), catchError(this.handleError<any>('getCatsWithAllTimeWinningRatioInDescOrder'))
+        map(catArray => catArray.map(cat =>
+          new CatWithString(cat.cat, cat.winningRatio === -1 ? 'N/A' : String(cat.winningRatio)))
+        ), catchError(this.handleError<any>('getCatsWithAllTimeWinningRatioInDescOrder'))
       );
   }
 
   getCatsWithTodayWinningRatioInDescOrder(): Observable<CatWithString[]> {
     return this.http.get<CatWithRatio[]>(endpoint + '/stats/ratio/today')
     .pipe(
-      map(catArray => {
-        const catWithStringArray: CatWithString[] = [];
-        catArray.forEach(cat => {
-          if (cat.winningRatio === -1) {
-            catWithStringArray.push(new CatWithString(cat.cat, 'N/A'));
-          } else {
-            catWithStringArray.push(new CatWithString(cat.cat, String(cat.winningRatio)));
-          }
-        });
-        return catWithStringArray;
-      }), catchError(this.handleError<any>('getCatsWithTodayWinningRatioInDescOrder'))
+      map(catArray => catArray.map(cat =>
+        new CatWithString(cat.cat, cat.winningRatio === -1 ? 'N/A' : String(cat.winningRatio)))
+      ), catchError(this.handleError<any>('getCatsWithTodayWinningRatioInDescOrder'))
     );
   }
 
