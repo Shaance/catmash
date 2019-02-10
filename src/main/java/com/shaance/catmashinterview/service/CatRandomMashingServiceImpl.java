@@ -8,7 +8,6 @@ import com.shaance.catmashinterview.entity.CatMashRecord;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,12 +32,16 @@ public class CatRandomMashingServiceImpl implements CatMashingService {
 	private CatDataService catDataService;
 	private CatMashRecordDao catMashRecordDao;
 	private CatDao catDao;
+	private ModelMapper modelMapper;
 
 	@Autowired
-	public CatRandomMashingServiceImpl(CatDataService catDataService, CatMashRecordDao catMashRecordDao, CatDao catDao) {
+	public CatRandomMashingServiceImpl(CatDataService catDataService, CatMashRecordDao catMashRecordDao,
+	                                   CatDao catDao, ModelMapper modelMapper) {
+
 		this.catDataService = catDataService;
 		this.catMashRecordDao = catMashRecordDao;
 		this.catDao = catDao;
+		this.modelMapper = modelMapper;
 	}
 
 	@Override
@@ -51,29 +54,34 @@ public class CatRandomMashingServiceImpl implements CatMashingService {
 
 	@Override
 	public Mono<CatMashRecordDto> saveCatMashRecord(@NonNull CatMashRecordDto catMashRecordDto) {
+
 		if (StringUtils.isEmpty(catMashRecordDto.getWinnerCatId())  || StringUtils.isEmpty(catMashRecordDto.getLoserCatId())){
 			return Mono.error(new IllegalArgumentException("catMashRecordDto has null or empty field(s)."));
 		}
 
-		Long numberOfCatsInDB = catDao.findById(catMashRecordDto.getWinnerCatId())
-				.concatWith(catDao.findById(catMashRecordDto.getLoserCatId()))
-				.count()
-				.block();
+		Mono<Boolean> winnerCatExists = catDao.findById(catMashRecordDto.getWinnerCatId())
+				.hasElement();
 
-		if(2L != numberOfCatsInDB){
-			return Mono.error(new IllegalArgumentException("One or more catId does not exist in database."));
-		}
+		Mono<Boolean> loserCatExists = catDao.findById(catMashRecordDto.getLoserCatId())
+				.hasElement();
 
-		ModelMapper modelMapper = new ModelMapper();
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		CatMashRecord catMashRecord = modelMapper.map(catMashRecordDto, CatMashRecord.class);
-		catMashRecord.setLocalDateTime(LocalDateTime.now());
-		return catMashRecordDao.save(catMashRecord)
-				.map(catMashRecord1 -> modelMapper.map(catMashRecord1, CatMashRecordDto.class))
-				.onErrorResume(e -> {
-					log.error("Error while saving cat mash record.", e);
-					return Mono.error(e);
+		return winnerCatExists.concatWith(loserCatExists)
+				.all(exists -> exists)
+				.flatMap(exists -> {
+					if(exists){
+						CatMashRecord catMashRecord = modelMapper.map(catMashRecordDto, CatMashRecord.class);
+						catMashRecord.setLocalDateTime(LocalDateTime.now());
+						return catMashRecordDao.save(catMashRecord)
+								.map(catMashRecord1 -> modelMapper.map(catMashRecord1, CatMashRecordDto.class))
+								.onErrorResume(e -> {
+									log.error("Error while saving cat mash record.", e);
+									return Mono.error(e);
+								});
+					} else {
+						return Mono.error(new IllegalArgumentException("One or more catId does not exist in database."));
+					}
 				});
+
 	}
 
 	private static <T> Comparator<T> randomComparator() {
